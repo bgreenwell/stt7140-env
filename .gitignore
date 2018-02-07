@@ -2,6 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
+.odt
 /homework/*.Rmd
 /homework/.Rhistory
 /slides/*.Rmd
