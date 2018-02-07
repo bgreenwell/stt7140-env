@@ -23,7 +23,7 @@ This is an Environmental Statistics course that covers basic statistical methodo
 
 - Sampling design and probability surveys
 
-- [Linear regression](https://github.com/bgreenwell/stt7140-env/blob/master/slides/ch3-regression.pdf)
+- [Linear and nonlinear regression](https://github.com/bgreenwell/stt7140-env/blob/master/slides/ch3-regression.pdf)
 
 - Generalized linear models (e.g., logistic regression)
 
