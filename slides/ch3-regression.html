@@ -181,9 +181,9 @@ class: inverse, center, middle
 
 * Many statistical applications deal with modeling how a single response variable, denoted `\(y\)`, depends on a single predictor, denoted `\(x\)`
 
-* Illustration: `shrimp.R`
+* Illustration: [`diporeia.R`](https://github.com/bgreenwell/stt7140-env/blob/master/code/diporeia.R)
 
-&lt;img src="figures/shrimp-data-1.svg" width="50%" style="display: block; margin: auto;" /&gt;
+&lt;img src="figures/Diporeia-data-1.svg" width="50%" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -196,7 +196,7 @@ class: inverse, center, middle
 
 * Here, `\(\beta_0\)` is the `\(y\)`-intercept of the regression line and `\(\beta_1\)` is the slope (i.e., *rate of change*)
 
-* Of course, the shrimp data do not lie perfectly on a straight line and a probabilistic model is needed to account for the variability of points about the line:
+* Of course, the Diporeia data do not lie perfectly on a straight line and a probabilistic model is needed to account for the variability of points about the line:
 
 --
 
@@ -273,7 +273,7 @@ class: inverse, center, middle
 
 # Least squares estimation
 
-&lt;img src="figures/shrimp-slr-1.svg" width="70%" style="display: block; margin: auto;" /&gt;
+&lt;img src="figures/Diporeia-slr-1.svg" width="70%" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -290,11 +290,11 @@ class: inverse, center, middle
 
 * In the R software, the `lm()` function can be used to fit regression models 
 
-    - Illustration `shrimp.R`
+    - Illustration [`diporeia.R`](https://github.com/bgreenwell/stt7140-env/blob/master/code/diporeia.R)
 
 --
 
-* For the shrimp example, we have `\(\widehat{y} = 0.839135 - 0.004498 x\)`, where `\(\widehat{y}\)` is the *predicted value* of `\(y\)`
+* For the Diporeia example, we have `\(\widehat{y} = 0.839135 - 0.004498 x\)`, where `\(\widehat{y}\)` is the *predicted value* of `\(y\)`
 
 
 ---
@@ -309,7 +309,7 @@ class: inverse, center, middle
 
 * Otherwise, the `\(y\)`-intercept may not have any practical meaning
 
-* For the shrimp example, the estimate slope is `\(\widehat{\beta}_1 = −0.0045\)` (**how do we interpret this number?**)
+* For the Diporeia example, the estimate slope is `\(\widehat{\beta}_1 = −0.0045\)` (**how do we interpret this number?**)
     
 * In SLR, it is natural to ask whether or not the **slope differs significantly from zero**. 
     
@@ -391,7 +391,9 @@ summary(slr)
 
 * The value of `\(R^2\)` is always between zero and one and **represents the proportion of variability in the response that is explained by the regression model**
 
-* **Question:** Interpret `\(R^2\)` from the SLR model fit to the shrimp data
+--
+
+* **Question:** Interpret `\(R^2\)` from the SLR model fit to the Diporeia data
 
 
 ---
