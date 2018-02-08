@@ -374,7 +374,7 @@ summary(slr)
 
 --
 
-* Similar results hold for the `\(y\)`-intercept `\(\beta_0\)`
+* Similar results hold for the `\(y\)`-intercept, `\(\beta_0\)`
 
 
 ---
@@ -387,20 +387,197 @@ summary(slr)
 
 * In MLR (i.e., when we have more than one predictor), a more general definition of `\(R^2\)` is required
 
-* Illustration: `shrip.R`
-
 * The value of `\(R^2\)` is always between zero and one and **represents the proportion of variability in the response that is explained by the regression model**
 
 --
 
-* **Question:** Interpret `\(R^2\)` from the SLR model fit to the Diporeia data
+* Illustration: [`diporeia.R`](https://github.com/bgreenwell/stt7140-env/blob/master/code/diporeia.R)
+
+
+---
+class: inverse, center, middle
+
+"All models are wrong, but some are useful."
+
+&lt;/br&gt;
+
+-George Box
 
 
 ---
 
-# Assessing the SLR fit
+# Accessing the model fit
 
-* TBD.
+* In using the SLR to model the Diporeia data, we assumed that the relationship between `weight` and `depth` is linear
+
+* The true *functional relationship* between `weight` and `depth` is probably not linear 😱
+
+* So, does that mean that the SLR model is wrong in this example? 
+
+* Of course not, **statistical models are only approaximations to the truth!!** (it's rather odd to call an approximation wrong)
+
+* For the Diporeia data, the SLR seems to provide a **reasonable** approximation!!
+
+    - Other statistical models may be just as, if not more, reasonable
+    
+* Of course, the SLR may not provide a reasonable approximation to the truth in many cases
+
+* The most common way to assess the fit of a regression models is through a thourough examination of the *residuals*
+
+
+---
+
+# Accessing the model fit
+
+* Given a fitted SLR model, we can compute a prediction for the `\(i\)`-th observation: `\(\widehat{y}_i = \widehat{\beta}_0 + \widehat{\beta}_1 x_i\)` for `\(i = 1, 2, \dots, n\)` (these are called the *fitted values*)
+
+* Ideally, if the model fit is good, then the diffeences between the observed and fitted values should be small: `$$r_i = y_i - \widehat{y}_i, \quad i = 1, 2, \dots, n$$`
+
+* These differences are referred to as the *residuals*
+
+* One can think of the `\(i\)`-th residual as an estimated of the `\(i\)`-th error term: `\(\epsilon_i = y_i - \beta_0 - \beta_1 x_i\)`
+
+* Recall that the errors in the SLR model are assumed to be random and have constant variance; hence, scatterplots of the residuals versus `\(x_i\)` or `\(\widehat{y}_i\)` should look like a random scatter of points!
+
+    - In other words, if the model is pecified correctly, scatterplots of the residual should not show any structure
+    
+    
+---
+
+# Accessing the model fit
+
+
+```r
+# Compute residuals
+resids &lt;- weight - fitted(slr)
+
+# Setup for side-by-side plots
+par(mfrow = c(1, 2))
+
+# Residual vs. depth
+plot(depth, resids, xlab = "Depth (m)", ylab = "Residual")
+abline(h = 0, lty = 2, col = "red2")  # reference line
+
+# Residual vs. fitted value
+plot(fitted(slr), resids, xlab = "Fitted value", ylab = "Residual")
+abline(h = 0, lty = 2, col = "red2")  # reference line
+```
+
+
+---
+
+# Accessing the model fit
+
+&lt;img src="figures/deporeia-res-plot-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# Accessing the model fit
+
+* Most often, it is better to work with the *standardized residuals* and *studentized residuals*
+
+* The *mean squared error* (MSE) provides an estimate of the constant variance, `\(\sigma^2\)`: `$$MSE = \sum_{i = 1}^n r_i^2 / (n - 2)$$`
+
+    - The *root-mean squared error* (RMSE), `\(RMSE = \sqrt{MSE}\)`, is often used to compare fitted regression models (e.g., using `\(k\)`-fold cross-validation)
+
+* The standardized residuals are defined as `\(r_i / \sqrt{MSE}\)`
+
+* The studentized residuals are defined as `\(r_i / \sqrt{MSE \left(1 - h_{ii}\right)}\)`,
+where `\(h_{ii}\)`, called a *hat value*, measures how far `\(x_i\)` is from the other `\(x\)` values (to be discussed more in-depth later!)
+
+
+---
+
+# Accessing the model fit
+
+
+```r
+# Compute MSE
+mse &lt;- sum(resids ^ 2) / (length(resids) - 2)
+
+# Compute standardized and studentized residuals
+(r_stan &lt;- resids / sqrt(mse))
+```
+
+```
+##           1           2           3           4           5           6 
+## -1.09676754 -0.25973316  1.81482819 -0.08066253 -0.17049172  0.89367894 
+##           7           8           9          10          11 
+##  0.28378082 -1.07962457 -1.21751940 -0.02175600  0.93426697
+```
+
+```r
+(r_stud &lt;- resids / sqrt(mse * (1 - hatvalues(slr))))
+```
+
+```
+##           1           2           3           4           5           6 
+## -1.23500390 -0.29246987  2.00339174 -0.08618023 -0.17978796  0.93955891 
+##           7           8           9          10          11 
+##  0.29781080 -1.13849222 -1.35237291 -0.02416571  1.32959703
+```
+
+
+---
+
+# Accessing the model fit
+
+&lt;img src="figures/deporeia-sres-plot-1.svg" width="65%" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# Accessing the model fit
+
+* The studentized residuals, as defined on the previous slide, are sometimes referred to as standardized residuals 😱:
+
+
+```r
+r_stud
+```
+
+```
+##           1           2           3           4           5           6 
+## -1.23500390 -0.29246987  2.00339174 -0.08618023 -0.17978796  0.93955891 
+##           7           8           9          10          11 
+##  0.29781080 -1.13849222 -1.35237291 -0.02416571  1.32959703
+```
+
+```r
+rstandard(slr)  # built-in R function
+```
+
+```
+##           1           2           3           4           5           6 
+## -1.23500390 -0.29246987  2.00339174 -0.08618023 -0.17978796  0.93955891 
+##           7           8           9          10          11 
+##  0.29781080 -1.13849222 -1.35237291 -0.02416571  1.32959703
+```
+
+
+---
+
+# Leave-one-out
+
+* An *extreme point* in the predictor space tends to pull the regression lines towards itself!
+
+
+---
+class: center, middle
+
+&lt;img src="figures/extreme-point-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# Leave-one-out
+
+* An *extreme point* in the predictor space tends to pull the regression lines towards itself!
+
+* This influential effect can mask points that have a strong influence on the estimated slope of the line (especially in the case where there are many predictor variables which is covered later) since this effect will tend to make the residual less extreme
+
+* An effective way to address this problem is to use the *jacknife*: exclude the `\(i\)`-th observation and recompute the least-squares estimates with the `\(i\)`-th point left out
     </textarea>
 <script src="libs/remark-latest.min.js"></script>
 <script src="macros.js"></script>
