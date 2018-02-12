@@ -575,9 +575,36 @@ class: center, middle
 
 * An *extreme point* in the predictor space tends to pull the regression lines towards itself!
 
-* This influential effect can mask points that have a strong influence on the estimated slope of the line (especially in the case where there are many predictor variables which is covered later) since this effect will tend to make the residual less extreme
+* This influential effect can mask points that have a strong influence on the estimated slope of the line (especially in the case where there are many predictors) since this effect will tend to make the residual less extreme
 
-* An effective way to address this problem is to use the *jacknife*: exclude the `\(i\)`-th observation and recompute the least-squares estimates with the `\(i\)`-th point left out
+* An effective way to address this problem is to use the *jacknife*: 
+
+    - For `\(i = 1, 2, \dots, n\)`:
+    
+      1) Rremove the `\(i\)`-th observation
+
+      2) Recompute the LS estimates, denoted `\(\widehat{\beta}_{0\left(i\right)}\)` and `\(\widehat{\beta}_{1\left(i\right)}\)`.
+    
+      3) Obtain the corresponding fitted value `\(\widehat{y}_{\left(i\right)} = \widehat{\beta}_{0\left(i\right)} + \widehat{\beta}_{1\left(i\right)} x_i\)`
+      
+      4) Obtain the *leave-one-out* residual `\(r_{\left(i\right)} = y_i - \widehat{y}_{\left(i\right)}\)`
+      
+* The `\(r_{\left(i\right)}\)`, for `\(i = 1, 2, \dots, n\)`, are known as the *PRESS* residuals
+    
+
+---
+
+# Leave-one-out
+
+* Fortunately, the PRESS residuals can be computed without having to refit the model `\(n\)` times: `$$r_{\left(i\right)} = r_i / \left(1 - h_{ii}\right)$$`
+
+* The PRESS statistic `$$PRESS = \sum_{i = 1} ^ n r_{\left(i\right)} ^ 2$$` provides a useful measure of the predictive performance of the model
+
+    - It is equivalent to *n-fold cross-validation* or *leave-one-out-cross-valudation*
+    
+    - `\(k\)`-fold cross validation is more general (5 and 10 are typical choices for `\(k\)`)
+    
+* Why use `\(k\)`-fold cross-validation? What's wrong with using `\(\sum_{i = 1} ^ n r_i ^ 2\)`?
     </textarea>
 <script src="libs/remark-latest.min.js"></script>
 <script src="macros.js"></script>
