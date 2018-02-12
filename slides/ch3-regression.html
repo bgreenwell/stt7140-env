@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="author" content="Brandon M. Greenwell" />
     <link href="libs/remark-css/default.css" rel="stylesheet" />
-    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="scrollable.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
@@ -604,7 +604,119 @@ class: center, middle
     
     - `\(k\)`-fold cross validation is more general (5 and 10 are typical choices for `\(k\)`)
     
-* Why use `\(k\)`-fold cross-validation? What's wrong with using `\(\sum_{i = 1} ^ n r_i ^ 2\)`?
+* Why bother use `\(k\)`-fold cross-validation? What's wrong with using `\(\sum_{i = 1} ^ n r_i ^ 2\)`?
+
+
+---
+
+# Walleye example
+
+Data on Walleye fish that were caught in Butternut Lake, Wisconsin at three different periods:
+
+.scrollable[
+
+
+```r
+# Load the data
+url &lt;- paste0("https://raw.githubusercontent.com/bgreenwell/stt7140-env/",
+              "master/data/walleye.csv")
+walleye &lt;- read.csv(url)
+```
+
+```
+## &lt;simpleError in parse_block(g[-1], g[1], params.src): duplicate label 'setup'&gt;
+```
+
+```r
+head(walleye)
+```
+
+```
+##   age   length period
+## 1   1 215.2540      1
+## 2   1 193.2576      1
+## 3   1 202.5781      1
+## 4   1 201.4597      1
+## 5   1 232.0309      1
+## 6   1 191.0207      1
+```
+
+]
+
+
+---
+
+# Walleye example
+
+.scrollable[
+
+
+```r
+# Fit an SLR model
+*walleye_slr &lt;- lm(length ~ age, data = walleye)
+summary(walleye_slr)  # print model summary
+```
+
+```
+## 
+## Call:
+## lm(formula = length ~ age, data = walleye)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -144.562  -21.966   -3.468   20.148  121.770 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 197.8332     1.0593   186.8   &lt;2e-16 ***
+## age          29.6099     0.2474   119.7   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 31.82 on 3196 degrees of freedom
+## Multiple R-squared:  0.8175,	Adjusted R-squared:  0.8175 
+## F-statistic: 1.432e+04 on 1 and 3196 DF,  p-value: &lt; 2.2e-16
+```
+
+]
+
+
+---
+
+# Walleye example
+
+.scrollable[
+
+&lt;img src="figures/walleye-plots-1.svg" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+---
+
+# Estimation versus prediction
+
+* For a particular value of the predictor, say `\(x_0\)`, we may be interested in one of two things:
+
+    1. Estimating the mean response, `\(\mu_0 = E\left(y | x = x_0\right)\)`, at `\(x = x_0\)` (**estimation**)
+    
+    2. Predicting a new response, `\(y_0\)`, at `\(x = x_0\)` (**prediction**)
+    
+* As it turns out, these two problems are similar!
+
+
+---
+
+# Estimating the mean response
+
+TBD.
+
+
+---
+
+# Predicing a new reponse
+
+TBD.
     </textarea>
 <script src="libs/remark-latest.min.js"></script>
 <script src="macros.js"></script>
