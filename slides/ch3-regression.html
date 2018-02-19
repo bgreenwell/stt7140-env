@@ -696,27 +696,59 @@ summary(walleye_slr)  # print model summary
 
 # Estimation versus prediction
 
-* For a particular value of the predictor, say `\(x_0\)`, we may be interested in one of two things:
+* Regression models are often used to predict a new response or estimate a mean
+response for a given value of the predictor `\(x\)`
 
-    1. Estimating the mean response, `\(\mu_0 = E\left(y | x = x_0\right)\)`, at `\(x = x_0\)` (**estimation**)
-    
-    2. Predicting a new response, `\(y_0\)`, at `\(x = x_0\)` (**prediction**)
-    
-* As it turns out, these two problems are similar
+* We have seen how to compute a predicted value `\(\widehat{y} = \widehat{\beta}_0 + \widehat{\beta}_1 x\)`
 
+* However, as with any estimate, we need a measure of reliability associated with `\(\widehat{y}_0\)`.
 
----
+* Returning to the Diporeia example, the fitted regression line is given by `$$\widehat{y} = 0.83914 - 0.0045 x$$`
+where `\(x\)` is the water depth and `\(y\)` is the weight of the Diporeia
 
-# Estimating the mean response
-
-TBD.
+* Suppose we want to predict the weight of a Diporeia at a depth of 40 meters. Then we would simply plug `\(x = 40\)` into the estimated regression equation to get a predicted value of `\(\widehat{y} = 0.83914 − 0.0045(40) = 0.65914\)` mg.
 
 
 ---
 
-# Predicing a new reponse
+# Estimation versus prediction
 
-TBD.
+* Regression analysis is really a problem of estimating a conditional mean or expectation, denoted `$$E\left[y|x\right] = \beta_0 + \beta_1 x$$`
+
+* Here, `\(E\left[y|x\right]\)` corresponds to the average value of the response `\(y\)` for all
+units in the population with a specific `\(x\)` value
+
+* Suppose we want to estimate the mean weight of the Diporeia found at a depth of 40 meters
+
+    - For the prediction problem, we want to predict the weight of a **single Diporeia**
+    
+    - For the estimation problem, we want to estimate the mean of a conditional population (i.e., the population of Diporeia found at a depth of 40 meters) 
+    
+    - In both cases, we use `\(\widehat{y} = 0.65914\)` as the predicted weight and as the estimate of the mean weight of Diporeia found at a depth of 40 meters
+    
+* In other words, the point estimate is th same for prediction and estimation, the difference lies in the estimated standard error of each!
+
+
+---
+
+# Estimation versus prediction
+
+* There is more uncertainty associated with prediction a single new observation (**why?**)
+
+* For a given value of `\(x\)`, it is customary to compute **confidence intervals for an estimated mean response** and a **prediction interval for a single new response value**
+
+* The idea of a prediction interval is to determine an interval that will contain a certain percentage of the population
+
+    - Because a prediction interval is attempting to capture a single, random future response, as opposed to the mean of the conditional population, it will be wider than the associated confidence interval
+
+
+---
+
+# Examples
+
+* [Using the `predict()` function in R]()
+
+* [Anscombe's quartet of "identical" simple linear regressions]()
     </textarea>
 <script src="libs/remark-latest.min.js"></script>
 <script src="macros.js"></script>

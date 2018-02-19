@@ -28,3 +28,12 @@ summary(slr)
 # Diagnostic plots
 par(mfrow = c(3, 2))
 plot(slr, which = 1L:6L)
+
+# Predicted value
+predict(slr, newdata = data.frame(depth = 40))
+
+# Confidence interval for the mean response
+predict(slr, newdata = data.frame(depth = 40), interval = "confidence")
+
+# Prediction interval for a single new response
+predict(slr, newdata = data.frame(depth = 40), interval = "prediction")
