@@ -422,7 +422,7 @@ class: inverse, center, middle
     
 * Of course, the SLR may not provide a reasonable approximation to the truth in many cases
 
-* The most common way to assess the fit of a regression models is through a thourough examination of the *residuals*
+* The most common way to assess the fit of a regression models is through a thorough examination of the *residuals*
 
 
 ---
@@ -431,7 +431,7 @@ class: inverse, center, middle
 
 * Given a fitted SLR model, we can compute a prediction for the `\(i\)`-th observation: `\(\widehat{y}_i = \widehat{\beta}_0 + \widehat{\beta}_1 x_i\)` for `\(i = 1, 2, \dots, n\)` (these are called the *fitted values*)
 
-* Ideally, if the model fit is good, then the diffeences between the observed and fitted values should be small: `$$r_i = y_i - \widehat{y}_i, \quad i = 1, 2, \dots, n$$`
+* Ideally, if the model fit is good, then the differences between the observed and fitted values should be small: `$$r_i = y_i - \widehat{y}_i, \quad i = 1, 2, \dots, n$$`
 
 * These differences are referred to as the *residuals*
 
@@ -439,7 +439,7 @@ class: inverse, center, middle
 
 * Recall that the errors in the SLR model are assumed to be random and have constant variance; hence, scatterplots of the residuals versus `\(x_i\)` or `\(\widehat{y}_i\)` should look like a random scatter of points!
 
-    - In other words, if the model is pecified correctly, scatterplots of the residual should not show any structure
+    - In other words, if the model is specified correctly, scatterplots of the residual should not show any structure
     
     
 ---
@@ -581,7 +581,7 @@ class: center, middle
 
     - For `\(i = 1, 2, \dots, n\)`:
     
-      1) Rremove the `\(i\)`-th observation
+      1) Remove the `\(i\)`-th observation
 
       2) Recompute the LS estimates, denoted `\(\widehat{\beta}_{0\left(i\right)}\)` and `\(\widehat{\beta}_{1\left(i\right)}\)`.
     
@@ -621,13 +621,6 @@ Data on Walleye fish that were caught in Butternut Lake, Wisconsin at three diff
 url &lt;- paste0("https://raw.githubusercontent.com/bgreenwell/stt7140-env/",
               "master/data/walleye.csv")
 walleye &lt;- read.csv(url)
-```
-
-```
-## &lt;simpleError in parse_block(g[-1], g[1], params.src): duplicate label 'setup'&gt;
-```
-
-```r
 head(walleye)
 ```
 
@@ -740,15 +733,17 @@ units in the population with a specific `\(x\)` value
 * The idea of a prediction interval is to determine an interval that will contain a certain percentage of the population
 
     - Because a prediction interval is attempting to capture a single, random future response, as opposed to the mean of the conditional population, it will be wider than the associated confidence interval
+    
+* Formulas on board (and in text)
 
 
 ---
 
 # Examples
 
-* [Using the `predict()` function in R]()
+* [Using the `predict()` function in R](https://github.com/bgreenwell/stt7140-env/blob/master/code/diporeia.R)
 
-* [Anscombe's quartet of "identical" simple linear regressions]()
+* [Anscombe's quartet of "identical" simple linear regressions](https://github.com/bgreenwell/stt7140-env/blob/master/code/anscombe.R)
     </textarea>
 <script src="libs/remark-latest.min.js"></script>
 <script src="macros.js"></script>
