@@ -16,6 +16,9 @@
 # the average mercury concentration ofthe sampled fish was used instead of the 
 # standardized value.
 
+# Install required packages
+# install.packages("car", "corrplot")
+
 # Load the data
 url <- paste0("https://raw.githubusercontent.com/bgreenwell/",
               "eesR/master/R/Data/HgBass.txt")
@@ -80,3 +83,9 @@ F_obs <- ((full_R2 - reduced_R2) / (reduced_df - full_df)) /
 
 # Stepwise selection
 stepwise <- step(full_model, direction = "backward")
+
+# We can also test individual coefficients this way
+anova(  # compare to t-test from summary() function!
+  lm(log(Avg.Mercury) ~ log(Alkalinity), data = hg_bass),
+  lm(log(Avg.Mercury) ~ log(Alkalinity) + log(Chlorophyll), data = hg_bass)
+)
