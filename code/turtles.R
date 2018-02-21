@@ -8,7 +8,9 @@ library(investr)
 set1 <- RColorBrewer::brewer.pal(9, "Set1")
 
 # Load the data
-turtles <- read.table("turtles", header = TRUE)
+url <- paste0("https://raw.githubusercontent.com/bgreenwell/",
+              "stt7140-env/master/data/turtles")
+turtles <- read.table(url, header = TRUE)
 
 # Scatterplot
 plot(
@@ -24,7 +26,11 @@ plot(
 fit1 <- lm(clutch ~ length, data = turtles)
 fit2 <- lm(clutch ~ length + I(length ^ 2), data = turtles)
 fit3 <- lm(clutch ~ length + I(length ^ 2) + I(length ^ 3), data = turtles)
-fit4 <- lm(clutch ~ poly(length, degree = 4, raw = TRUE), data = turtles)
+fit4 <- lm(clutch ~ length + I(length ^ 2) + I(length ^ 3) + I(length ^ 4), 
+           data = turtles)
+
+# Shortcut!!
+fit17 <- lm(clutch ~ poly(length, degree = 17, raw = TRUE), data = turtles)
 
 # Plot fitted models
 par(mfrow = c(2, 2))
@@ -38,8 +44,7 @@ plotFit(fit4, xlab = "Carapace length (mm)", ylab = "Number of eggs",
         pch = 19, col = set1[2L], interval = "prediction")
 
 # Be cautious when using polynomial regression
-plotFit(lm(clutch ~ poly(length, degree = 17, raw = TRUE), data = turtles), 
-        xlab = "Carapace length (mm)", ylab = "Number of eggs",
+plotFit(fit17, xlab = "Carapace length (mm)", ylab = "Number of eggs",
         pch = 19, col = set1[2L], interval = "prediction")
 
 # Print model summaries
@@ -55,3 +60,6 @@ plot(fit2, which = 1L:2L)
 
 # Compare models
 anova(fit2, fit4)
+
+# Stepwise regression
+step(fit4, direction = "backward")
