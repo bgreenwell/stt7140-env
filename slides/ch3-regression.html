@@ -847,114 +847,77 @@ anova(reduced_model, full_model)
 
 * This can be useful for model building, but better techniques are available (e.g., *forward*, *backward*, and *stagewise regression*)
 
+* [mercury.R](https://github.com/bgreenwell/stt7140-env/blob/master/code/mercury.R)
+
 ---
 
-# Mercury example
+# Polynomial regression
 
-.scrollable[
+* Often times, the relationship between `\(x\)` and `\(y\)` is *nonlinear*: `\(y = f\left(x\right) + \epsilon\)`
 
+* In these cases, SLR may not provide an adequate fit
 
-```r
-url &lt;- paste0("https://raw.githubusercontent.com/bgreenwell/",
-              "eesR/master/R/Data/HgBass.txt")
-hg_bass &lt;- read.table(url, header = TRUE)
-# pairs(hg_bass)  # scatterplot matrix
+* *Polynomial models* offer a flexible way to modeling nonlinear relationships (due to *Taylor's theorem*), but as we will see, should be **used with caution** `$$E\left(y|x\right) = \beta_0 + \beta_1x + \beta_2 x^2 + \dots + \beta_p x^p$$`
 
-# Full and reduced models
-fm1 &lt;- lm(log(Avg.Mercury) ~ log(Alkalinity) + pH + log(Calcium) + 
-            log(Chlorophyll), data = hg_bass)
-summary(fm1)
-```
+* Note that polynomial regression is just a special case of MLR
 
-```
-## 
-## Call:
-## lm(formula = log(Avg.Mercury) ~ log(Alkalinity) + pH + log(Calcium) + 
-##     log(Chlorophyll), data = hg_bass)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -1.56640 -0.34854  0.09526  0.25318  1.57607 
-## 
-## Coefficients:
-##                  Estimate Std. Error t value Pr(&gt;|t|)   
-## (Intercept)        0.7198     0.5569   1.292  0.20244   
-## log(Alkalinity)   -0.4728     0.1565  -3.020  0.00404 **
-## pH                -0.0146     0.1325  -0.110  0.91275   
-## log(Calcium)       0.1135     0.1352   0.839  0.40541   
-## log(Chlorophyll)  -0.1603     0.0862  -1.860  0.06902 . 
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 0.6041 on 48 degrees of freedom
-## Multiple R-squared:  0.5219,	Adjusted R-squared:  0.4821 
-## F-statistic:  13.1 on 4 and 48 DF,  p-value: 2.749e-07
-```
+* In R, we have to use the `I()` function to add polynomial terms, for example
 
 ```r
-fm2 &lt;- lm(log(Avg.Mercury) ~ log(Alkalinity) + log(Chlorophyll), data = hg_bass)
-anova(fm2, fm1)
+fit &lt;- lm(y ~ x + I(x ^ 2))
 ```
+will fit a quadratic model of the form `$$E\left(y|x\right) = \beta_0 + \beta_1 x + \beta_2 x^2$$`
 
-```
-## Analysis of Variance Table
-## 
-## Model 1: log(Avg.Mercury) ~ log(Alkalinity) + log(Chlorophyll)
-## Model 2: log(Avg.Mercury) ~ log(Alkalinity) + pH + log(Calcium) + log(Chlorophyll)
-##   Res.Df    RSS Df Sum of Sq      F Pr(&gt;F)
-## 1     50 17.778                           
-## 2     48 17.520  2   0.25883 0.3546 0.7033
-```
+---
 
-```r
-# Stepwise regression
-step(fm1, direction = "both")
-```
+# Polynomial regression
 
-```
-## Start:  AIC=-48.67
-## log(Avg.Mercury) ~ log(Alkalinity) + pH + log(Calcium) + log(Chlorophyll)
-## 
-##                    Df Sum of Sq    RSS     AIC
-## - pH                1    0.0044 17.524 -50.656
-## - log(Calcium)      1    0.2572 17.777 -49.897
-## &lt;none&gt;                          17.520 -48.669
-## - log(Chlorophyll)  1    1.2627 18.782 -46.981
-## - log(Alkalinity)   1    3.3298 20.849 -41.447
-## 
-## Step:  AIC=-50.66
-## log(Avg.Mercury) ~ log(Alkalinity) + log(Calcium) + log(Chlorophyll)
-## 
-##                    Df Sum of Sq    RSS     AIC
-## - log(Calcium)      1    0.2544 17.778 -51.892
-## &lt;none&gt;                          17.524 -50.656
-## + pH                1    0.0044 17.520 -48.669
-## - log(Chlorophyll)  1    1.6268 19.151 -47.951
-## - log(Alkalinity)   1    4.2983 21.822 -41.030
-## 
-## Step:  AIC=-51.89
-## log(Avg.Mercury) ~ log(Alkalinity) + log(Chlorophyll)
-## 
-##                    Df Sum of Sq    RSS     AIC
-## &lt;none&gt;                          17.778 -51.892
-## + log(Calcium)      1    0.2544 17.524 -50.656
-## + pH                1    0.0017 17.777 -49.897
-## - log(Chlorophyll)  1    1.5153 19.294 -49.557
-## - log(Alkalinity)   1    8.2329 26.011 -33.723
-```
+.pull-left[
 
-```
-## 
-## Call:
-## lm(formula = log(Avg.Mercury) ~ log(Alkalinity) + log(Chlorophyll), 
-##     data = hg_bass)
-## 
-## Coefficients:
-##      (Intercept)   log(Alkalinity)  log(Chlorophyll)  
-##           0.6276           -0.3852           -0.1579
-```
+Ashton et al. (2007) measured the carapace length (in mm) of 18 female gopher tortoises (Gopherus polyphemus) in Okeeheelee County Park, Florida, and X-rayed them to count the number of eggs in each.
+
+* Ashton, K.G., R.L. Burke, and J.N. Layne. 2007. Geographic variation in body and clutch size of gopher tortoises. Copeia 2007: 355-363.
+
+* [turtles.R](https://github.com/bgreenwell/stt7140-env/blob/master/code/turtles.R)
 
 ]
+
+.pull-right[
+
+&lt;img src="figures/xray.png" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+
+
+---
+
+# Analysis of covariance
+
+TBD.
+
+
+---
+
+# Multicolinearity
+
+TBD.
+
+
+---
+
+# Inverse estimation
+
+
+```r
+library(investr)
+arsenic_lm &lt;- lm(measured ~ actual, data = arsenic)
+plotFit(arsenic_lm, interval = "prediction")
+abline(h = 2.5, lty = 2, col = "red2")
+```
+
+&lt;img src="figures/arsenic-1.svg" width="50%" style="display: block; margin: auto;" /&gt;
     </textarea>
 <script src="libs/remark-latest.min.js"></script>
 <script src="macros.js"></script>
