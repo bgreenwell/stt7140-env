@@ -14,7 +14,9 @@ This is an Environmental Statistics course that covers basic statistical methodo
 
 -   Nonlinear regression
 
--   Generalized linear models (e.g., logistic regression)
+-   Logistic regression
+
+-   Generalized linear models
 
 -   Decision trees and random forests
 
