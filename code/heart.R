@@ -12,7 +12,8 @@
 # install.packages("plotly")
 
 # Load required packages
-library(plotly)
+library(car)     # for vif() function
+library(plotly)  # for interactive plotting
 
 # Load the data
 url <- paste0("https://raw.githubusercontent.com/bgreenwell/",
@@ -38,4 +39,4 @@ fit <- lm(Length ~ Height + Weight, data = heart)
 summary(fit)
 
 # Compute variance inflation factors
-car::vif(fit)
+vif(fit)
