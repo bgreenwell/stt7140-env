@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Generalized Linear Models (GzLMs)</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Brandon M. Greenwell" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="scrollable.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Generalized Linear Models (GzLMs)
+## <br/>ES/STT 7140: Statistical Modeling for Environmental Data
+### Brandon M. Greenwell
+
+---
+
+
+
+
+
+---
+
+## Introduction
+
+* In ordinary linear regression, we assume that the response `\(y\)` is continuous (and normally distributed)
+
+* In many real word regression problems, however, the response may not be normally distributed, or even continuous!
+
+* For example, many response variables of interest are binary (e.g., `"survived"` or `"died"`, `"infected"` or `"not infected"`)
+
+* Another common type of response is a count (e.g., the number of eggs in a nest or number of vines on a tree)
+
+    - Although not normal, we can use the *Poisson* and *negative binomial* distributions to model counts
+    
+* In this chapter, we introduce GzLMs for accommodating many types of non-normal response variables
+
+* We start with the most common type of GzLM for handling binary outcomes
+
+
+---
+class: inverse, center, middle
+
+
+# Logistic Regression
+
+---
+
+## Introduction to logistic regression
+
+* Consider an experiment where the measured outcome of interest is either a success or failure (which can be coded as 1 and 0, respectively)
+
+* The probability of a success or failure may depend on a set of predictor variables
+
+* One idea on how to model such data is to simply fit a regression with the goal of
+estimating the probability of success given some values of the predictor 
+
+* However, this approach will not work because probabilities are constrained to fall between 0 and 1
+
+* In the classical regression setup with a continuous response, the predicted values can range over all real numbers
+
+* For binary outcomes, a different modeling technique is needed
+
+
+---
+
+## Introduction
+
+* Recall that fitting an SLR model is equivalent to estimating a conditional mean `\(E\left(y|x\right) = \beta_0 + \beta_1 x\)`
+
+* In logistic regression, we have `\(E\left(y|x\right) = P\left(y = 1|x\right)\)`
+
+    - In other words, in logistic regression, we are estimating a conditional probability
+    
+* The goal in logistic regression is to model the probability that `\(y = 1\)`
+
+    - If we know `\(P\left(y = 1|x\right)\)` then we also know `\(P\left(y = 0|x\right) = 1 - P\left(y = 1|x\right)\)`
+
+
+---
+
+## Dobson's beetle data
+
+Beetles were exposed to gaseous carbon disulphide at various concentrations
+(in mf/L) for five hours (Bliss, 1935) and the number of beetles killed were
+noted. The data are available in the [`investr`](https://cran.r-project.org/package=investr) package.
+
+
+```r
+# install.packages("investr")
+data(beetle, package = "investr")
+beetle
+```
+
+```
+##    ldose  n  y
+## 1 1.6907 59  6
+## 2 1.7242 60 13
+## 3 1.7552 62 18
+## 4 1.7842 56 28
+## 5 1.8113 63 52
+## 6 1.8369 59 53
+## 7 1.8610 62 61
+## 8 1.8839 60 60
+```
+
+
+---
+
+## Dobson's beetle data
+
+
+```r
+plot(y/n ~ ldose, data = beetle, pch = 19, cex = 1.2)
+```
+
+&lt;img src="figures/unnamed-chunk-2-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+## Binomial experiments
+
+* **Binomial experiments** are experiments which consist of:
+
+    (1) `\(n\)` *independent* trials
+    
+    (2) Each trial results in a binary outcome (typically defined as success or failure)
+    
+    (3) The probability of sucess, denoted `\(p\)`, is the same for each trial
+    
+* Can you think of a simple binomial experiment?
+
+* The **binomial distribution** describes the probability of observing `\(k\)` successes in a binomial experiment with `\(n\)` (independent) trials and probability of success `\(p\)`
+
+    - The binomial distribution is denoted `\(Bin\left(n, p\right)\)`
+    </textarea>
+<script src="libs/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();
+(function(time) {
+  var d2 = function(number) {
+    return ('0' + number).slice(-2); // left-pad 0 to minutes/seconds
+  },
+
+  time_format = function(total) {
+    var secs = Math.abs(total) / 1000;
+    var h = Math.floor(secs / 3600);
+    var m = Math.floor(secs % 3600 / 60);
+    var s = Math.round(secs % 60);
+    var res = d2(m) + ':' + d2(s);
+    if (h > 0) res = h + ':' + res;
+    return res;  // [hh:]mm:ss
+  },
+
+  slide_number_div = function(i) {
+    return document.getElementsByClassName('remark-slide-number').item(i);
+  },
+
+  current_page_number = function(i) {
+    return slide_number_div(i).firstChild.textContent;  // text "i / N"
+  };
+
+  var timer = document.createElement('span'); timer.id = 'slide-time-left';
+  var time_left = time, k = slideshow.getCurrentSlideIndex(),
+      last_page_number = current_page_number(k);
+
+  setInterval(function() {
+    time_left = time_left - 1000;
+    timer.innerHTML = ' ' + time_format(time_left);
+    if (time_left < 0) timer.style.color = 'red';
+  }, 1000);
+
+  slide_number_div(k).appendChild(timer);
+
+  slideshow.on('showSlide', function(slide) {
+    var i = slide.getSlideIndex(), n = current_page_number(i);
+    // reset timer when a new slide is shown and the page number is changed
+    if (last_page_number !== n) {
+      time_left = time; last_page_number = n;
+      timer.innerHTML = ' ' + time_format(time); timer.style.color = null;
+    }
+    slide_number_div(i).appendChild(timer);
+  });
+})(60000);</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
