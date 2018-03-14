@@ -20,9 +20,6 @@ class: center, middle, inverse, title-slide
 
 
 
-
----
-
 ## Introduction
 
 * In ordinary linear regression, we assume that the response `\(y\)` is continuous (and normally distributed)
@@ -48,7 +45,7 @@ class: inverse, center, middle
 
 ---
 
-## Introduction to logistic regression
+## Binary outcomes
 
 * Consider an experiment where the measured outcome of interest is either a success or failure (which can be coded as 1 and 0, respectively)
 
@@ -66,9 +63,9 @@ estimating the probability of success given some values of the predictor
 
 ---
 
-## Introduction
+## Binary outcomes
 
-* Recall that fitting an SLR model is equivalent to estimating a conditional mean `\(E\left(y|x\right) = \beta_0 + \beta_1 x\)`
+* Recall that fitting an SLR model is equivalent to estimating a conditional mean of the form `$$E\left(y|x\right) = \beta_0 + \beta_1 x$$`
 
 * In logistic regression, we have `\(E\left(y|x\right) = P\left(y = 1|x\right)\)`
 
@@ -89,7 +86,7 @@ noted. The data are available in the [`investr`](https://cran.r-project.org/pack
 
 
 ```r
-# install.packages("investr")
+*# install.packages("investr")
 data(beetle, package = "investr")
 beetle
 ```
@@ -136,6 +133,32 @@ plot(y/n ~ ldose, data = beetle, pch = 19, cex = 1.2)
 * The **binomial distribution** describes the probability of observing `\(k\)` successes in a binomial experiment with `\(n\)` (independent) trials and probability of success `\(p\)`
 
     - The binomial distribution is denoted `\(Bin\left(n, p\right)\)`
+
+
+---
+
+## Logistic regression
+
+* Logistic regression goes a step further by allowing the probability of success to be a function of `\(x\)` (i.e., a binomial distribution where `\(p\)` depends on `\(x\)`)
+
+* In (simple) logistic regression, we model the probability of success as a function of `\(x\)` using `$$p\left(x\right) = \frac{\exp\left(\beta_0 + \beta_1 x\right)}{1 + \exp\left(\beta_0 + \beta_1 x\right)}$$`
+
+    - If `\(\beta_1 = 0\)` then `\(p\left(x\right)\)` is a constant
+    
+    - If `\(\beta_1 &lt; 0\)`, then `\(p\left(x\right)\)` is an increasing function in `\(x\)` (and vice versa if `\(\beta_1 &lt; 0\)`)
+    
+    - For a particular probability of success `\(p\)`, the *odds ratio* ($OR$) is defined as `$$OR = \frac{p}{1 - p}$$`
+
+--
+
+* In logistic regression, we are modelling the `\(\log\left(OR\right)\)`, also referred to as the *logit*: `$$\log\left[\frac{p\left(x\right)}{1 - p\left(x\right)}\right] = \beta_0 + \beta_1 x$$`
+
+
+---
+
+## Maximum likelihood estimation
+
+* The question now is "How do we estimate `\(\beta_0\)` and `\(\beta_1\)`?"
     </textarea>
 <script src="libs/remark-latest.min.js"></script>
 <script src="macros.js"></script>
