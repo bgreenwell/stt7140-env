@@ -147,11 +147,11 @@ plot(y/n ~ ldose, data = beetle, pch = 19, cex = 1.2)
     
     - If `\(\beta_1 &lt; 0\)`, then `\(p\left(x\right)\)` is an increasing function in `\(x\)` (and vice versa if `\(\beta_1 &lt; 0\)`)
     
-    - For a particular probability of success `\(p\)`, the *odds ratio* ($OR$) is defined as `$$OR = \frac{p}{1 - p}$$`
+    - For a particular probability of success `\(p\)`, the *odds of success* is defined as `\(p / \left(1 - p\right)\)`
 
 --
 
-* In logistic regression, we are modelling the `\(\log\left(OR\right)\)`, also referred to as the *logit*: `$$\log\left[\frac{p\left(x\right)}{1 - p\left(x\right)}\right] = \beta_0 + \beta_1 x$$`
+* In logistic regression, we are modelling the `\(\log\left(odds\right)\)`, also referred to as the *logit*: `$$\log\left[\frac{p\left(x\right)}{1 - p\left(x\right)}\right] = \beta_0 + \beta_1 x = \log\left[odds\left(x\right)\right]$$`
 
 
 ---
@@ -159,6 +159,129 @@ plot(y/n ~ ldose, data = beetle, pch = 19, cex = 1.2)
 ## Maximum likelihood estimation
 
 * The question now is "How do we estimate `\(\beta_0\)` and `\(\beta_1\)`?"
+
+* The method of *maximum likelihood* (ML) estimation is a general technique for estimating the parameters of a distribution from observed data
+
+* For linear regression with normally distributed errors the ML estimates of the parameters are equivalent to the LS estimates
+
+    - ML estimation also provides an estimate of `\(\sigma\)` in linear regression!
+
+* A general overview of ML estimation is beyond the scope of this class, but we'll illustrate with a simple example: 
+
+    - Finding the ML estimator of `\(p\)` in a binomial experiment
+
+* Typically, however, closed-form solutions are not available for most problems and iterative numerical techniques are required in finding ML estimates (e.g., the *Newton-Raphson algorithm* and *iterative re-weighted least squares*)
+
+---
+
+## Logistic regression in R
+
+.scrollable[
+
+* In R, we can fit the logistic regression models using the `glm()` function
+
+* `glm()` is a general function for fitting all kinds of GzLMs (including ordinary linear regression models!)
+
+* To specify a GzLM you need to specify some additional arguments (the most important being the `family` argument)
+
+* For logistic regression we always specify `family = binomial` in the call to `glm()`
+
+* The template for simple logistic regression is
+
+```r
+fit &lt;- glm(y ~ x, data = &lt;data-name&gt;, family = binomial)
+```
+where `y` is a factor with the first level denoting a "success" or 
+
+```r
+fit &lt;- glm(cbind(y, n-y) ~ x, data = &lt;data-name&gt;, family = binomial)
+```
+where `n` and `y` are the number of trials and successes, respectively, in a binomial experiment
+
+]
+
+
+---
+
+## Dobson's beetle data
+
+.scrollable[
+
+
+```r
+fit &lt;- glm(
+* cbind(y, n-y) ~ ldose,
+  data = beetle,
+* family = binomial(link = "logit")
+)
+summary(fit)
+```
+
+```
+## 
+## Call:
+## glm(formula = cbind(y, n - y) ~ ldose, family = binomial(link = "logit"), 
+##     data = beetle)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -1.5941  -0.3944   0.8329   1.2592   1.5940  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)  -60.717      5.181  -11.72   &lt;2e-16 ***
+## ldose         34.270      2.912   11.77   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 284.202  on 7  degrees of freedom
+## Residual deviance:  11.232  on 6  degrees of freedom
+## AIC: 41.43
+## 
+## Number of Fisher Scoring iterations: 4
+```
+
+]
+
+
+---
+
+## Interpeting the coefficients
+
+* So how do we interpret `\(\beta_0\)` and `\(\beta_1\)` in the (simple) logistic regression model?
+
+* Recall that in the SLR model, `\(\beta_1\)` represents the rate of change in the mean response per one-unit increase in `\(x\)`
+
+* In the (simple) logistic regression model, however, we don't interpret `\(\beta_1\)` directly, but rather, `\(\exp\left(\beta_1\right)\)`
+
+* As it turns out, for a continuous predictor `\(x\)`, `$$OR = \frac{odds\left(x + 1\right)}{odds\left(x\right)} = \exp\left(\beta_1\right)$$`
+
+* Hence, for a continuous predictor `\(x\)`, `\(\exp\left(\beta_1\right)\)` represents the multiplicative 
+
+
+---
+
+## Inference for the slope
+
+* As was the case with SLR, we are often concerned with the statistical significance of the slope; in particular, whether or not it statistically significantly differs from zero: `$$H_0: \beta_1 = 0 \quad versus \quad H_1: \beta_1 \ne 0$$`
+
+* The simplest approach is to use a *Wald test*
+
+* The Wald test for `\(\beta_1\)` in the logistic regression model is based on the test statistic `$$z = \frac{\widehat{\beta}_1}{\widehat{SE}\left(\widehat{\beta}_1\right)}$$`
+
+* We would reject `\(H_0\)` at the `\(\alpha\)` level of significance whenever `\(|z| &gt; z_{1 - \alpha/2}\)`, where `\(z_{1 - \alpha/2}\)` is the quantile from a standard normal distribution
+
+    - A typical value is 1.96 which corresponds to `\(\alpha = 0.05\)`
+    
+    ```r
+    qnorm(0.975)
+    ```
+    
+    ```
+    ## [1] 1.959964
+    ```
     </textarea>
 <script src="libs/remark-latest.min.js"></script>
 <script src="macros.js"></script>
