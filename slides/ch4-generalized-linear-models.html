@@ -248,6 +248,35 @@ summary(fit)
 
 ---
 
+## Predictions from a logistic regression
+
+* In logistic regression, we can make predictions on one of two scales:
+
+    - The probability scale (i.e., generating predicted probabilities)
+    
+    - The logit scale
+    
+* In R, we can obtain such predictions using the `predict()` function with the `type` option, for example
+
+    - `predict(fit, type = "response")` (for predicted probabilities)
+
+    - `predict(fit, type = "link")` (for predicted logits)
+
+
+---
+
+## Dobson's beetle data
+
+
+```r
+investr::plotFit(fit, pch = 19, col = "red2", cex = 1.2, lwd = 2)
+```
+
+&lt;img src="figures/unnamed-chunk-6-1.svg" width="80%" style="display: block; margin: auto;" /&gt;
+
+
+---
+
 ## Interpeting the coefficients
 
 * So how do we interpret `\(\beta_0\)` and `\(\beta_1\)` in the (simple) logistic regression model?
@@ -258,7 +287,7 @@ summary(fit)
 
 * As it turns out, for a continuous predictor `\(x\)`, `$$OR = \frac{odds\left(x + 1\right)}{odds\left(x\right)} = \exp\left(\beta_1\right)$$`
 
-* Hence, for a continuous predictor `\(x\)`, `\(\exp\left(\beta_1\right)\)` represents the multiplicative 
+* Hence, for a continuous predictor `\(x\)`, `\(\exp\left(\beta_1\right)\)` represents the **multiplicative** increase in the odds of success per one-unit increase in `\(x\)`
 
 
 ---
