@@ -269,9 +269,9 @@ summary(fit)
 
 * The simplest approach is to use a *Wald test*
 
-* The Wald test for `\(\beta_1\)` in the logistic regression model is based on the test statistic `$$z = \frac{\widehat{\beta}_1}{\widehat{SE}\left(\widehat{\beta}_1\right)}$$`
+* The Wald test for `\(\beta_1\)` in the logistic regression model is based on the test statistic `$$z_{obs} = \frac{\widehat{\beta}_1}{\widehat{SE}\left(\widehat{\beta}_1\right)}$$`
 
-* We would reject `\(H_0\)` at the `\(\alpha\)` level of significance whenever `\(|z| &gt; z_{1 - \alpha/2}\)`, where `\(z_{1 - \alpha/2}\)` is the quantile from a standard normal distribution
+* We would reject `\(H_0\)` at the `\(\alpha\)` level of significance whenever `\(|z_{obs}| &gt; z_{1 - \alpha/2}\)`, where `\(z_{1 - \alpha/2}\)` is the quantile from a standard normal distribution
 
     - A typical value is 1.96 which corresponds to `\(\alpha = 0.05\)`
     
@@ -282,6 +282,144 @@ summary(fit)
     ```
     ## [1] 1.959964
     ```
+
+
+---
+
+## Multiple logistic regression
+
+* We saw how to extend the SLR model to include more than one predicor (e.g., polynomial regression)
+
+* The same can be done for logistic regression in an analagous manner
+
+* Suppose we have `\(p\)` predictors: `\(x_1, x_2, \dots, x_p\)`
+
+* In multiple logistic regression, the probability of success is modelled using `$$p\left(x_1, x_2, \dots, x_p\right) = \frac{exp\left(\beta_0 + \beta_1x_1 + \beta_2x_2 + \dots + \beta_px_p\right)}{1 + exp\left(\beta_0 + \beta_1x_1 + \beta_2x_2 + \dots + \beta_px_p\right)}$$`
+
+* Or, equivalently, `$$logit\left[p\left(x_1, x_2, \dots, x_p\right)\right] = \beta_0 + \beta_1x_1 + \beta_2x_2 + \dots + \beta_px_p$$`
+
+
+---
+
+## Significance testing
+
+* In ordinary linear regression, the SSE/MSE/RMSE measure how "close" the predicted values from the fitted model are to the the observed outcomes
+
+* In logistic regression (and GzLMs in general), we use a statistic called the *deviance*, denoted `\(D\)`
+
+* In general, the deviance is defined as `\(D = 2 \left(l_{saturated} - l_{proposed}\right)\)`, where
+
+    - `\(l_{saturated}\)` is the log-likelihood for the *saturated* model (i.e., a model with as many parameters as observations)
+    
+    - `\(l_{proposed}\)` is the log-likelihood for the proposed model under consideration
+    
+* If the proposed model is "good", then `\(D\)` should be small and will **approximately** follow a chi-squared distribution on `\(n - p - 1\)` degrees of freedom (think od `\(D\)` as a measure of "badness of fit"; that is, larger is worse)
+
+    - This is an asymptotic result, meaning it is only reliable with "large enough"" sample sizes!
+    
+* Much like the `\(F\)`-tests in ordinary linear regression, we can use the deviance and chi-squared tests to compare nested models
+
+
+---
+
+## Plant inbreeding example
+
+
+
+```r
+# Load the data
+inbreeding &lt;- read.table(
+  file = "/Users/bgreenwell/Dropbox/teaching/stt7140-env/data/inbreeding.dat",
+  col.names = c("damage", "inbred", "y", "biomass")
+)
+head(inbreeding)  # print first few observations
+```
+
+```
+##   damage inbred y biomass
+## 1 0.2138      0 1  0.0525
+## 2 0.2138      0 1  0.0920
+## 3 0.2138      1 1  0.0239
+## 4 0.2138      0 0  0.0149
+## 5 0.0000      0 0  0.0410
+## 6 0.3907      0 0  0.0264
+```
+
+
+---
+
+## Plant inbreeding example
+
+.scrollable[
+
+
+```r
+# Fit a logistic regression model
+fit &lt;- glm(
+  formula = y ~ as.factor(inbred) + biomass + damage, 
+  data = inbreeding,
+  family = binomial(link = "logit")
+)
+summary(fit)  # print model summary
+```
+
+```
+## 
+## Call:
+## glm(formula = y ~ as.factor(inbred) + biomass + damage, family = binomial(link = "logit"), 
+##     data = inbreeding)
+## 
+## Deviance Residuals: 
+##      Min        1Q    Median        3Q       Max  
+## -2.06793  -0.89987   0.00085   1.10251   1.77324  
+## 
+## Coefficients:
+##                    Estimate Std. Error z value Pr(&gt;|z|)   
+## (Intercept)         -1.1230     0.6795  -1.653   0.0984 . 
+## as.factor(inbred)1   0.3110     0.6821   0.456   0.6484   
+## biomass             41.3349    15.9374   2.594   0.0095 **
+## damage              -1.8555     2.1420  -0.866   0.3864   
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 69.235  on 49  degrees of freedom
+## Residual deviance: 52.463  on 46  degrees of freedom
+## AIC: 60.463
+## 
+## Number of Fisher Scoring iterations: 6
+```
+
+]
+
+
+---
+
+## Plant inbreeding example
+
+.scrollable[
+
+
+```r
+# Fit a logistic regression model
+fit2 &lt;- update(fit, y ~ biomass)
+anova(fit2, fit, test = "Chisq")  # chi-squared test comparing models
+```
+
+```
+## Analysis of Deviance Table
+## 
+## Model 1: y ~ biomass
+## Model 2: y ~ as.factor(inbred) + biomass + damage
+##   Resid. Df Resid. Dev Df Deviance Pr(&gt;Chi)
+## 1        48     53.579                     
+## 2        46     52.463  2   1.1164   0.5722
+```
+
+]
+
+* What statistical hypothesis is being tested here?
     </textarea>
 <script src="libs/remark-latest.min.js"></script>
 <script src="macros.js"></script>
