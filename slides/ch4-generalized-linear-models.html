@@ -501,7 +501,7 @@ anova(fit2, fit, test = "Chisq")  # chi-squared test comparing models
   
   2) The probability that two or more events will happen in a small interval of time is small
   
-  3) The probability that an event occurs in a short interval of times is proportional to the length of the time interval
+  3) The probability that an event occurs in a short interval of time is proportional to the length of the interval
 
 
 ---
@@ -519,6 +519,13 @@ anova(fit2, fit, test = "Chisq")  # chi-squared test comparing models
 * The regression coefficients can be estimated via maximum likelihood estimation
 
 * The likelihood function being maximized is `\(L\left(\boldsymbol{\beta}\right) = \prod_{i = 1}^n \frac{\exp\left(-\mu_i\right)\mu_i^{y_i}}{y_i!}\)`, where `\(\mu_i = \exp\left(\beta_0 + \sum_{j = 1}^p \beta_j x_j\right)\)`
+
+
+---
+
+## Poisson regression
+
+* [aids-cases.R](https://github.com/bgreenwell/stt7140-env/blob/master/code/aids-cases.R)
     </textarea>
 <script src="libs/remark-latest.min.js"></script>
 <script src="macros.js"></script>
