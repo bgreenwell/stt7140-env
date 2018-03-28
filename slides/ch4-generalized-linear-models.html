@@ -317,13 +317,13 @@ investr::plotFit(fit, pch = 19, col = "red2", cex = 1.2, lwd = 2)
 
 ## Multiple logistic regression
 
-* We saw how to extend the SLR model to include more than one predicor (e.g., polynomial regression)
+* We saw how to extend the SLR model to include more than one predictor (e.g., polynomial regression)
 
-* The same can be done for logistic regression in an analagous manner
+* The same can be done for logistic regression in an analogous manner
 
 * Suppose we have `\(p\)` predictors: `\(x_1, x_2, \dots, x_p\)`
 
-* In multiple logistic regression, the probability of success is modelled using `$$p\left(x_1, x_2, \dots, x_p\right) = \frac{exp\left(\beta_0 + \beta_1x_1 + \beta_2x_2 + \dots + \beta_px_p\right)}{1 + exp\left(\beta_0 + \beta_1x_1 + \beta_2x_2 + \dots + \beta_px_p\right)}$$`
+* In multiple logistic regression, the probability of success is modeled using `$$p\left(x_1, x_2, \dots, x_p\right) = \frac{exp\left(\beta_0 + \beta_1x_1 + \beta_2x_2 + \dots + \beta_px_p\right)}{1 + exp\left(\beta_0 + \beta_1x_1 + \beta_2x_2 + \dots + \beta_px_p\right)}$$`
 
 * Or, equivalently, `$$logit\left[p\left(x_1, x_2, \dots, x_p\right)\right] = \beta_0 + \beta_1x_1 + \beta_2x_2 + \dots + \beta_px_p$$`
 
@@ -449,6 +449,76 @@ anova(fit2, fit, test = "Chisq")  # chi-squared test comparing models
 ]
 
 * What statistical hypothesis is being tested here?
+
+
+---
+
+## Generlized linear models (GLMs)
+
+* Recall that the MLR model is fitting a conditional mean of the form `$$\mu = E\left(y|\boldsymbol{x}\right) = \beta_0 + \sum_{j = 1}^p \beta_j x_j$$`
+
+    - We refer to `\(\beta_0 + \sum_{j = 1}^p \beta_j x_j\)` as the *linear predictor*
+
+* This includes, as special cases, factorial ANOVAs, one- and two-sample `\(t\)`-tests, ANOCOVA, polynomial models, etc.
+
+* The mean of the (continuous) response is modeled as a **linear** function of the `\(\beta_j\)`s `\(\left(j = 1, 2, \dots, p\right)\)`
+
+* The response `\(y\)` is assumed to have a normal distribution with mean `\(\mu = E\left(y|\boldsymbol{x}\right)\)` and constant variance `\(\sigma^2\)`
+
+* In GLMs, the mean response is "linked" to the linear predictor via a *link function*
+
+
+---
+
+## Generlized linear models (GLMs)
+
+* GLMs have two important characteristics:
+
+  1) The response consists of a random sample from an *exponential distribution*
+    
+  2) The mean response `\(\mu\)` is related to the linear predictor through a link function `\(g\left(\cdot\right)\)` `$$g\left(\mu\right) = g\left(E\left[y|\boldsymbol{x}\right]\right) = \beta_0 + \sum_{j = 1}^p \beta_j x_j$$` 
+  
+* For the MLR model, the link function is just the identity function `\(g\left(x\right) = x\)`
+
+* For logistic regression, `\(\mu = E\left[y|\boldsymbol{x}\right] = p\left(x\right)\)`, and the link function is the logit
+
+
+---
+
+## Poisson regression
+
+* Another special case of the GLM that is useful in practice is the Poisson GLM
+
+* The Poisson distribution is a discrete distribution that is useful for modelling count data
+
+* For example, Venables and Ripley (2002) provide some data on the number of new AIDS cases each year, in Belgium, from 1981 onward
+
+* If we let `\(Y\)` represent the number of new AIDS cases in a particular year, then `\(Y \sim Poi\left(\mu = 1 / \lambda\right)\)`; that is, `\(Y\)` is said to have a Poisson distribution with mean `\(\mu\)` or rate parameter `\(\lambda\)`
+
+* Poisson models involve three assumptions:
+
+  1) The occurrences of the event of interest in non-overlapping "time" intervals are independent
+  
+  2) The probability that two or more events will happen in a small interval of time is small
+  
+  3) The probability that an event occurs in a short interval of times is proportional to the length of the time interval
+
+
+---
+
+## Poisson regression
+
+* In a Poisson GLM, the mean `\(\mu\)` response is related to the linear predictor through a (natural) `\(\log\)` link `$$\log\left(\mu\right) = \beta_0 + \sum_{j = 1}^p \beta_j x_j$$`
+
+    - The `\(\log\)` link is a natural choice for count data since counts are always positive
+    
+    - This is also an example of a *log-linear* model which are useful for, among other things, analyzing complex contingency tables
+    
+* **Note:** the Poisson model does NOT assume constant variance!
+
+* The regression coefficients can be estimated via maximum likelihood estimation
+
+* The likelihood function being maximized is `\(L\left(\boldsymbol{\beta}\right) = \prod_{i = 1}^n \frac{\exp\left(-\mu_i\right)\mu_i^{y_i}}{y_i!}\)`, where `\(\mu_i = \exp\left(\beta_0 + \sum_{j = 1}^p \beta_j x_j\right)\)`
     </textarea>
 <script src="libs/remark-latest.min.js"></script>
 <script src="macros.js"></script>
