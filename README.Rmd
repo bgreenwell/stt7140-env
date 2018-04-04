@@ -29,9 +29,7 @@ This is an Environmental Statistics course that covers basic statistical methodo
 
 - Nonlinear regression
 
-- Logistic regression ([Homework 5](https://github.com/bgreenwell/stt7140-env/blob/master/homework/homework5.pdf); [Homework 6](https://github.com/bgreenwell/stt7140-env/blob/master/homework/homework6.pdf))
-
-- Generalized linear models
+- Generalized linear models ([Homework 5](https://github.com/bgreenwell/stt7140-env/blob/master/homework/homework5.pdf); [Homework 6](https://github.com/bgreenwell/stt7140-env/blob/master/homework/homework6.pdf))
 
 - Decision trees and random forests
 
