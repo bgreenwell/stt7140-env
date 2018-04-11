@@ -7,6 +7,11 @@ plot(t + 1980, y, xlab = "Year", ylab = "# of new AIDS cases",
 m0 <- glm(y ~ t, family = poisson(link = "log"))
 summary(m0)  # print model summary
 
+new.t <- seq(1, 13, length = 100)
+fv <- predict(m0, data.frame(t = new.t), se = TRUE)
+plot(t + 1980, y, xlab = "Year", ylab = "# of new AIDS cases", ylim = c(0, 280))
+lines(new.t + 1980, exp(fv$fit))
+
 # Standard residual plots
 par(mfrow = c(1, 2))
 plot(m0, which = 1:2)

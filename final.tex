@@ -1,0 +1,126 @@
+\documentclass[12pt,a4paper]{article}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+\let\hlipl\hlkwb
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+
+\title{ES/STT 7140: Final Exam}
+\date{\today}
+\maketitle
+
+\textbf{Note:} The final is due by the end of class on 04/18/2018 (you may drop it off anytime during class on that day). The completed final must be delivered in person (email is not acceptable). Since this is an exam, working together is prohibited, but you are welcome to use the book, course notes, etc. Good luck!
+
+\noindent\textbf{Question 1 (15 points)} Run the R script \texttt{hematology.R} and answer the following questions:
+
+\begin{enumerate}
+  \item Based on a scatterplot, does a simple linear regression model seem reasonable for these data? Explain your answer using 2--3 complete sentences.
+  \item Fit a simple linear regression model and write out the estimated equation for the line.
+  \item Using $\alpha = 0.05$, test the hypothesis $H_0: \beta_1 = 0$ vs. $H_1: \beta_1 \ne 0$. Interpret the results of the test in the context of this problem using 2--3 complete sentences.
+  \item Based on residual diagnostic plots, does it look as though these data satisfy the assumptions of the simple linear regression model? Explain your answer using 2--3 complete sentences.
+  \item Compute a 95\% confidence interval for the slope $\beta_1$ and interpret the results.
+  \item Summarize the results of the analysis using 2--3 complete sentences.
+\end{enumerate}
+
+
+\newpage
+
+\noindent\textbf{Question 2 (15 points)} Korich et al. (2000) reported a study of how laboratory mice respond to the exposure of microscopic parasites of the genus \textit{Cryptosporidium}. The objective of the study was to develop a \textit{dose-response} model, that is, a model to predict the probability that a mouse will be infected if it is exposed to a certain number (i.e., dose) of parasites. The study is important because, according to the U.S. Center for Disease Control, \textit{Cryptosporidium} is one of the most common causes of waterborne human diseases in the United States  during the past two decades. Once  an animal or person is infected, the parasite lives in the intestine and passes in the stool. The parasite is protected by an outer shell that allows it to survive outside the body for long periods of time and makes it very resistant to chlorine-based disinfectants. Both the disease and the parasite are commonly known as ``crypto.'' The parasite may be found in drinking water and recreational water throughout the world.
+
+The U.S. EPA in a 2006 publication requires surface water systems in the U.S. to provide treatment using ultraviolet light (UV) disinfection as one treatment option to meet treatment requirements. Many drinking water utilities in the U.S. are looking at UV disinfections as the best available technology for meeting their crypto inactivation requirements and goals. The term ``inactivation'' refers to the fact that UV radiation typically does not kill the parasite, but alters the parasite's nucleic acids, thus preventing replication and infection. As a result, the effectiveness of UV radiation must be evaluated using mouse-infectivity studies.
+
+In a typical mouse-infection study, a dose-response relationship is first determined. In this step, a number of mice are inoculated with a known number of crypto oocysts ($d$) to observe the number of infected mice. The resulting infectivity data are used to fit a dose-response model, typically a log-linear logistic model of the form:
+
+\begin{equation}
+  logit\left(p\right) = \beta_0 + \beta_1 \log_{10}\left(d\right),
+\end{equation}
+where $p$ is the probability of infection, and $d$ is the number of oocyst ingested.
+
+The data can be loaded by running the following R code
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{url} \hlkwb{<-} \hlkwd{paste0}\hlstd{(}\hlstr{"https://raw.githubusercontent.com/bgreenwell/"}\hlstd{,}
+              \hlstr{"eesR/master/R/Data/cryptoDATA.csv"}\hlstd{)}
+\hlstd{crypto} \hlkwb{<-} \hlkwd{read.table}\hlstd{(url,} \hlkwc{header} \hlstd{=} \hlnum{TRUE}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+\begin{enumerate}
+
+  \item Based on a scatterplot of the observed proportion of infections versus $\log_{10}\left(d\right)$, does there appear to be any relationship between the likelihood of infection and the number of oocyst ingested? Explain your answer using 2--3 complete sentences.
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{plot}\hlstd{(Y}\hlopt{/}\hlstd{N} \hlopt{~} \hlkwd{log10}\hlstd{(Dose),} \hlkwc{data} \hlstd{= crypto)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+  \item Use the code below to fit the simple dose-response model seen in Equation (1). For every 1-unit increase in $\log_{10}\left(d\right)$, what is the multiplicative effect on the estimated odds of infection? Construct a 95\% confidence interval for this estimate and interpret (this is done fr you in the code chunk below). (Do not worry if you get a warning after running th code!)
+  
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{fit} \hlkwb{<-} \hlkwd{glm}\hlstd{(}\hlkwd{cbind}\hlstd{(Y, N}\hlopt{-}\hlstd{Y)} \hlopt{~} \hlkwd{log10}\hlstd{(Dose),} \hlkwc{data} \hlstd{= crypto,}
+           \hlkwc{family} \hlstd{=} \hlkwd{binomial}\hlstd{(}\hlkwc{link} \hlstd{=} \hlstr{"logit"}\hlstd{))}
+\hlkwd{summary}\hlstd{(fit)}  \hlcom{# print model summary}
+\hlkwd{exp}\hlstd{(}\hlkwd{confint}\hlstd{(fit,} \hlkwc{parm} \hlstd{=} \hlnum{2}\hlstd{))}  \hlcom{# 95% confidence interval}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+  \item Using the fitted model from part 2), estimate the median effective dose, denoted $Ld_{50}$; that is, estimate the dose that will result in a probability of infection of 50\%.
+
+\end{enumerate}
+
+\end{document}
