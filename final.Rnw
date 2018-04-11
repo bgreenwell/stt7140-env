@@ -48,7 +48,7 @@ crypto <- read.table(url, header = TRUE)
 plot(Y/N ~ log10(Dose), data = crypto)
 @
 
-  \item Use the code below to fit the simple dose-response model seen in Equation (1). For every 1-unit increase in $\log_{10}\left(d\right)$, what is the multiplicative effect on the estimated odds of infection? Construct a 95\% confidence interval for this estimate and interpret (this is done fr you in the code chunk below). (Do not worry if you get a warning after running th code!)
+  \item Use the code below to fit the simple dose-response model seen in Equation (1). For every 1-unit increase in $\log_{10}\left(d\right)$, what is the multiplicative effect on the estimated odds of infection? Construct a 95\% confidence interval for this parameter and interpret (this is done for you in the code chunk below). (Do not worry if you get a warning after running th code!)
   
 <<eval=FALSE>>=
 fit <- glm(cbind(Y, N-Y) ~ log10(Dose), data = crypto, 
